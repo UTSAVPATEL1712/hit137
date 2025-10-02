@@ -3,9 +3,9 @@ from functools import wraps
 
 def execution_timer(func):
     """
-    Decorator that measures and prints the execution time of a method.
-    This decorator is applied to methods that perform time-intensive operations like model inference.
-    """
+     Decorator that times and prints the execution time of a method.
+     This decorator is laid over procedures that take time-consuming tasks such as model inference.
+     """
     @wraps(func)
     def wrapper(*args, **kwargs):
         start_time = time.time()
@@ -17,8 +17,9 @@ def execution_timer(func):
 
 def log_method_calls(func):
     """
-    Decorator that logs when a method is called.
-    This decorator is used to track method invocations for debugging and monitoring purposes.
+    Decorator which logs calls to methods.
+    This decorator will be used to monitor and debug method invocations.
+    
     """
     @wraps(func)
     def wrapper(*args, **kwargs):
@@ -28,8 +29,7 @@ def log_method_calls(func):
 
 def validate_input_type(expected_type):
     """
-    Decorator that validates the type of the first argument passed to a function.
-    This decorator ensures that the input provided to model processing functions is of the expected type.
+   Decorator which checks the type of the first argument to a function.
     """
     def decorator(func):
         @wraps(func)

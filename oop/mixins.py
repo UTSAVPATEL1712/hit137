@@ -1,3 +1,4 @@
+
 class LoggingMixin:
     """
     A mixin class that provides logging functionality to other classes.
@@ -6,38 +7,39 @@ class LoggingMixin:
     
     def log_info(self, message):
         """
-        Logs an informational message to the console.
-        This method is used by classes that inherit from this mixin to provide status updates.
+        Logs the messages onto the console.
+        This method is used by the classes that inherit from this class.
+        
         """
         print(f"[INFO] {message}")
     
     def log_error(self, message):
         """
-        Logs an error message to the console.
-        This method is used by classes that inherit from this mixin to report errors.
+        Logs the error message onto the console.
+        This method is used by the classes that inherit from this class.
         """
         print(f"[ERROR] {message}")
 
 class PerformanceMixin:
     """
-    A mixin class that provides performance tracking capabilities.
-    This mixin is intended to be used with model classes to track their performance metrics.
+    The class also offers performance monitoring.
+    The classes which inherit this class use this method.
+
     """
     
     def __init__(self, *args, **kwargs):
+      
         super().__init__(*args, **kwargs)
-        self._call_count = 0
+        self._call_count = 0 
     
     def track_call(self):
         """
-        Increments the call counter to track how many times a method has been invoked.
-        This method is used to monitor the usage of model inference methods.
+        Increments the call count to monitor the number of times a method has been called.
         """
         self._call_count += 1
     
     def get_call_count(self):
         """
-        Returns the number of times tracking methods have been called.
-        This method provides access to the internal call counter for performance analysis.
+        It returns the number of times this method have been called.
         """
         return self._call_count
