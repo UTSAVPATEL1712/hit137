@@ -1,5 +1,3 @@
-
-
 from .base_model import BaseModel
 from oop.mixins import LoggingMixin, PerformanceMixin
 from oop.decorators import execution_timer, validate_input_type
@@ -10,24 +8,23 @@ import torch
 
 class ImageCaptionerModel(LoggingMixin, PerformanceMixin, BaseModel):
     """
-    This class inherits from BaseModel and uses its multiple methods.
+    Implementation of BaseModel for image captioning using Hugging Face BLIP.
     """
-    
+
     def __init__(self):
         """
-        Initializing the image caption model with its name and description.
-        
+        Initialize the image captioning model with its name and description.
         """
         super().__init__(
-           
+            "Salesforce/blip-image-captioning-base",   # ✅ Hugging Face model name
+            "Image captioning model using BLIP"
         )
         self._processor = None
         self._model = None
-    
 
     def load_model(self):
         """
-        This method loads the image captioning model.
+        Load the image captioning model and processor.
         """
         try:
             self.log_info(f"Loading model: {self._model_name}")
@@ -38,28 +35,24 @@ class ImageCaptionerModel(LoggingMixin, PerformanceMixin, BaseModel):
         except Exception as e:
             self.log_error(f"Failed to load image captioning model: {str(e)}")
             self._is_loaded = False
-    
+
     @execution_timer
     @validate_input_type(str)  # Validates file path
     def process_input(self, image_path):
         """
-        It process the input image and returns a caption.
-       
+        Process an input image file and return a generated caption.
         """
         if not self._is_loaded:
             self.load_model()
-        
+
         self.track_call()
-        
+
         try:
-           
-            raw_image = Image.open(image_path).convert('RGB')
-            
-           
+            raw_image = Image.open(image_path).convert("RGB")
             inputs = self._processor(raw_image, return_tensors="pt")
             out = self._model.generate(**inputs)
             caption = self._processor.decode(out[0], skip_special_tokens=True)
-            
+
             return {
                 "image_path": image_path,
                 "caption": caption
@@ -67,14 +60,16 @@ class ImageCaptionerModel(LoggingMixin, PerformanceMixin, BaseModel):
         except Exception as e:
             self.log_error(f"Error processing image input: {str(e)}")
             return {"error": f"Processing failed: {str(e)}"}
-    
+
     def get_model_info(self):
-       
+        """
+        Return metadata about the model.
+        """
         return {
             "name": self._model_name,
             "description": self._model_description,
             "task": "Image Captioning",
             "library": "Transformers",
             "input_type": "Image file path",
-            "output_type": "Text caption describing the image"
+            "output_type": "Generated text caption"
         }
